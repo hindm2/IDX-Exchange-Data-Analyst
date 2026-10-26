@@ -24,25 +24,42 @@ Monthly aggregation → Dataset exploration and validation → Mortgage rate enr
 - [ ] **Weeks 11–12:** Market intelligence report and final presentation
 
 ---
-## Week 1 — Monthly Dataset Aggregation
+## Week 1 — Monthly Aggregation
 
-**Script:** `week1_monthly_aggregation_with_counts.py`
+### What it does
 
-Combines available monthly MLS Listing and Sold files into two separate datasets, filters both to `PropertyType == "Residential"`, and saves the results as CSV files.
+- Checks that every required month has exactly one input file.
+- Combines 30 months of Listings and 33 months of Sold data.
+- Keeps records where `PropertyType = Residential`.
+- Verifies that the combined Residential row count equals the sum of the monthly Residential counts.
+- Saves two combined CSVs and a detailed text report.
+- Preserves duplicates and all property subtypes within Residential.
 
-### Data Coverage
+### Row counts
 
-- Requested period: January 2024–September 2026.
-- Available files: 29 monthly files per dataset.
-- Months not provided: May, June, July, and September 2026.
-- Missing months are documented and excluded from the combined datasets.
+| Dataset | Monthly files | Period covered | Raw rows across files | Residential rows after combining |
+|---------|--------------:|----------------|----------------------:|---------------------------------:|
+| Listings | 30 | Jan 2024–Jun 2026 | 915,823 | 583,065 |
+| Sold | 33 | Jan 2024–Sep 2026 | 736,473 | 495,291 |
 
-### Row Counts
+Both combined datasets contain 84 columns.
 
-| Dataset | Before Concatenation | After Concatenation | Before Residential Filter | After Residential Filter |
-|---|---:|---:|---:|---:|
-| Listings | 894,360 | 894,360 | 894,360 | 568,163 |
-| Sold | 638,834 | 638,834 | 638,834 | 429,193 |
+### Findings and limitations
+
+- The Residential filter excluded 332,758 Listing records and 241,182 Sold records.
+- July, August, and September 2026 Listing files each contain only 1,000 raw rows. These months were excluded because the downloads appear incomplete.
+- January 2026 Listings contains only 2,606 raw rows, including 1,721 Residential records. This month remains included but is flagged for completeness review.
+- File availability and row counts alone do not confirm that downloads are complete.
+- Listings and Sold have different end dates. Direct monthly comparisons should use their shared period, January 2024–June 2026.
+- Period coverage is based on filenames; record-level date ranges still require validation.
+
+### Output files
+
+- `CRMLS_listings_Residential_202401_202606.csv`
+- `CRMLS_sold_Residential_202401_202609.csv`
+- `outputs/week1_output.txt`
+
+Property-level CSV files are kept outside this repository.
 
 ## Week 2 — Dataset Understanding and Data Quality Review
 Reviewed 321,181 residential single-family records across 84 columns.

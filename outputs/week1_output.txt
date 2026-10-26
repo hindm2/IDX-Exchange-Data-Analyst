@@ -1,1 +1,88 @@
+WEEK 1 — MONTHLY AGGREGATION
 
+Listings: January 2024–June 2026
+Sold: January 2024–September 2026
+July–September 2026 Listings excluded: suspected 1,000-row download limit.
+January 2026 Listings included but flagged: previously counted 2,606 raw rows.
+Filter: PropertyType = Residential
+No PropertySubType filter or duplicate removal applied.
+File availability does not establish download completeness.
+
+LISTINGS
+CRMLSListing202401.csv: raw=27,454, Residential=17,007
+CRMLSListing202402.csv: raw=27,447, Residential=17,490
+CRMLSListing202403.csv: raw=32,282, Residential=20,501
+CRMLSListing202404.csv: raw=36,503, Residential=24,025
+CRMLSListing202405.csv: raw=38,796, Residential=25,447
+CRMLSListing202406.csv: raw=35,893, Residential=23,310
+CRMLSListing202407.csv: raw=36,340, Residential=23,019
+CRMLSListing202408.csv: raw=35,305, Residential=22,215
+CRMLSListing202409.csv: raw=34,625, Residential=22,257
+CRMLSListing202410.csv: raw=34,730, Residential=21,921
+CRMLSListing202411.csv: raw=25,128, Residential=15,108
+CRMLSListing202412.csv: raw=19,417, Residential=10,694
+CRMLSListing202501.csv: raw=37,469, Residential=22,690
+CRMLSListing202502.csv: raw=33,983, Residential=21,930
+CRMLSListing202503.csv: raw=38,492, Residential=25,104
+CRMLSListing202504.csv: raw=40,187, Residential=26,695
+CRMLSListing202505.csv: raw=40,271, Residential=26,438
+CRMLSListing202506.csv: raw=26,399, Residential=17,056
+CRMLSListing202507.csv: raw=27,345, Residential=17,194
+CRMLSListing202508.csv: raw=25,210, Residential=15,658
+CRMLSListing202509.csv: raw=26,923, Residential=16,859
+CRMLSListing202510.csv: raw=27,586, Residential=17,186
+CRMLSListing202511.csv: raw=20,677, Residential=12,194
+CRMLSListing202512.csv: raw=18,773, Residential=10,516
+CRMLSListing202601.csv: raw=2,606, Residential=1,721
+CRMLSListing202602.csv: raw=32,884, Residential=20,823
+CRMLSListing202603.csv: raw=39,153, Residential=25,614
+CRMLSListing202604.csv: raw=39,020, Residential=26,490
+CRMLSListing202605.csv: raw=24,284, Residential=16,437
+CRMLSListing202606.csv: raw=30,641, Residential=19,466
+Monthly files used: 30
+Total raw rows: 915,823
+Total Residential rows: 583,065
+Rows excluded by Residential filter: 332,758
+Combined columns: 84
+Saved: CRMLS_listings_Residential_202401_202606.csv
+
+SOLD
+CRMLSSold202401.csv: raw=17,958, Residential=11,194
+CRMLSSold202402.csv: raw=19,925, Residential=13,063
+CRMLSSold202403.csv: raw=23,276, Residential=15,784
+CRMLSSold202404.csv: raw=24,640, Residential=17,295
+CRMLSSold202405.csv: raw=26,487, Residential=18,474
+CRMLSSold202406.csv: raw=24,328, Residential=16,625
+CRMLSSold202407.csv: raw=26,240, Residential=17,809
+CRMLSSold202408.csv: raw=24,558, Residential=16,791
+CRMLSSold202409.csv: raw=21,267, Residential=14,555
+CRMLSSold202410.csv: raw=23,274, Residential=16,275
+CRMLSSold202411.csv: raw=20,279, Residential=14,158
+CRMLSSold202412.csv: raw=20,241, Residential=14,220
+CRMLSSold202501.csv: raw=18,738, Residential=10,976
+CRMLSSold202502.csv: raw=18,702, Residential=12,101
+CRMLSSold202503.csv: raw=21,445, Residential=14,409
+CRMLSSold202504.csv: raw=23,262, Residential=15,851
+CRMLSSold202505.csv: raw=23,154, Residential=15,544
+CRMLSSold202506.csv: raw=22,883, Residential=15,329
+CRMLSSold202507.csv: raw=23,646, Residential=15,800
+CRMLSSold202508.csv: raw=22,972, Residential=15,225
+CRMLSSold202509.csv: raw=22,443, Residential=15,134
+CRMLSSold202510.csv: raw=23,233, Residential=15,897
+CRMLSSold202511.csv: raw=19,088, Residential=12,978
+CRMLSSold202512.csv: raw=20,538, Residential=13,975
+CRMLSSold202601.csv: raw=16,487, Residential=10,083
+CRMLSSold202602.csv: raw=19,010, Residential=12,272
+CRMLSSold202603.csv: raw=23,372, Residential=15,656
+CRMLSSold202604.csv: raw=24,261, Residential=16,581
+CRMLSSold202605.csv: raw=24,276, Residential=16,430
+CRMLSSold202606.csv: raw=25,812, Residential=17,676
+CRMLSSold202607.csv: raw=25,466, Residential=17,188
+CRMLSSold202608.csv: raw=23,131, Residential=15,141
+CRMLSSold202609.csv: raw=22,081, Residential=14,802
+Monthly files used: 33
+Total raw rows: 736,473
+Total Residential rows: 495,291
+Rows excluded by Residential filter: 241,182
+Combined columns: 84
+Saved: CRMLS_sold_Residential_202401_202609.csv

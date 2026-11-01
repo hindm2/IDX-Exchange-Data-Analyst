@@ -71,8 +71,8 @@ Both inputs were already filtered to `PropertyType == "Residential"` during Week
 | Residential records inspected | 495,291 | 658,117 |
 | Original columns | 84 | 84 |
 | Columns above 90% missing | 15 | 13 |
-| High-missing non-core columns dropped | 15 | Not yet confirmed |
-| Columns retained in analysis dataset | 69 | Not yet confirmed |
+| High-missing non-core columns dropped | 15 | 13 |
+| Columns retained in analysis dataset | 69 | 71|
 
 **Sold dataset:** all 495,291 records were retained. Column removal changed the dataset from 84 to 69 columns; it did not remove property records.
 

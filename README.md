@@ -60,24 +60,25 @@ The combined CSVs are stored separately from the 66 raw monthly files.
 Inspect dataset structure, review missing values, examine numeric
 distributions, and flag potential data-quality issues before cleaning.
 
-### Data and Filtering
+### Dataset Scope and Validation
 
-Both datasets cover January 2024–September 2026.
+Week 1 combined the monthly files and filtered them to
+`PropertyType == "Residential"`.
 
-Week 1 already filtered the records to `PropertyType == "Residential"`.
-The validation script checked property types and reapplied this filter;
-no additional rows were removed. No PropertySubType filter was applied.
+Weeks 2–3 used those Residential-only outputs. The property-type
+check confirmed that every record was Residential, so no additional
+rows were removed.
 
-| Check | Sold | Listings |
-|-------|-----:|---------:|
-| Rows before validation filter | 495,291 | 658,117 |
-| Rows after validation filter | 495,291 | 658,117 |
-| Columns | 84 | 84 |
-| Columns above 90% missing | 15 | 13 |
-| Columns dropped during validation | 0 | 0 |
+| Measure | Sold | Listings |
+|---------|-----:|---------:|
+| Raw records combined in Week 1 | 736,473 | 1,034,830 |
+| Residential records retained in Week 1 | 495,291 | 658,117 |
+| Records inspected in Weeks 2–3 | 495,291 | 658,117 |
+| Columns inspected | 84 | 84 |
+| Columns flagged as above 90% missing | 15 | 13 |
 
-The original Residential-versus-other property-type shares cannot be
-calculated from these already-filtered inputs.
+During Weeks 2–3, no records or columns were removed.
+Missing values and potential outliers were documented for later cleaning.
 
 ### Missing-Value Review
 

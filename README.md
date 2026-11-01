@@ -237,4 +237,4 @@ All input records were preserved. Two columns were added: `year_month` and `rate
 
 The enriched datasets will be used in the next stage of data cleaning and analysis. Original input files were preserved.
 
-**Interpretation:** `rate_30yr_fixed` is expressed as a percentage. It provides national mortgage-market context and does not represent the actual mortgage rate obtained by an individual buyer.
+

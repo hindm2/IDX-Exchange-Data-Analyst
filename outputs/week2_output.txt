@@ -1,0 +1,109 @@
+WEEKS 2–3 — DATASET STRUCTURING, VALIDATION AND EDA
+Period: January 2024–September 2026
+
+INPUT DATA
+Week 1 combined datasets were already filtered to:
+PropertyType == "Residential"
+No PropertySubType restriction was applied.
+
+Listings: 658,117 rows, 84 columns
+Sold: 495,291 rows, 84 columns
+Property types found: Residential
+Additional non-Residential records removed: 0
+
+MISSING-VALUE REVIEW
+Listings: 13 columns above 90% missing
+Sold: 15 columns above 90% missing
+Core fields retained even when partially missing.
+
+SOLD ANALYSIS DATASET
+High-missing non-core columns dropped: 15
+Final rows: 495,291
+Final columns: 69
+Rows removed during column reduction: 0
+
+Columns dropped:
+WaterfrontYN, BasementYN, FireplacesTotal,
+AboveGradeFinishedArea, TaxAnnualAmount, BuilderName,
+TaxYear, BuildingAreaTotal, ElementarySchoolDistrict,
+CoBuyerAgentFirstName, BelowGradeFinishedArea,
+BusinessType, CoveredSpaces, LotSizeDimensions,
+MiddleOrJuniorSchoolDistrict
+
+Listings final column count: awaiting confirmation.
+
+SOLD NUMERIC SUMMARY
+ClosePrice:
+  Minimum: $0
+  Median: $825,000
+  Mean: approximately $1,189,311
+  95th percentile: $2,859,933.60
+  99th percentile: $5,600,000
+  Maximum: $989,500,000
+
+LivingArea (recorded units):
+  Minimum: 0
+  Median: 1,648
+  Mean: approximately 1,902.61
+  95th percentile: 3,568.20
+  99th percentile: 5,300
+  Maximum: 17,021,320
+
+DaysOnMarket:
+  Minimum: -288
+  Median: 19
+  Mean: approximately 37.64
+  95th percentile: 132
+  99th percentile: 235
+  Maximum: 12,430
+
+SOLD PRICE VERSUS LIST PRICE
+Eligible records: 495,288
+Eligibility: finite, positive ClosePrice and ListPrice
+
+Above list: 196,241 (39.62%)
+At list: 86,393 (17.44%)
+Below list: 212,654 (42.94%)
+
+DATE CONSISTENCY
+ListingContractDate after CloseDate:
+  75 of 495,290 comparable records
+PurchaseContractDate after CloseDate:
+  242 of 495,094 comparable records
+ListingContractDate after PurchaseContractDate:
+  315 of 495,093 comparable records
+
+Date-issue counts may overlap.
+
+DAYS ON MARKET DISTRIBUTION
+Negative: 56 (0.01%)
+0: 20,006 (4.04%)
+1–7: 99,894 (20.17%)
+8–30: 190,174 (38.40%)
+31–60: 88,524 (17.87%)
+61–90: 43,472 (8.78%)
+91–180: 42,319 (8.54%)
+Over 180: 10,846 (2.19%)
+Missing or nonnumeric: 0
+
+TOP COUNTIES BY MEDIAN CLOSE PRICE
+Minimum 200 records with finite, positive ClosePrice.
+
+County             Median price     Records
+San Mateo          $1,700,000          8,452
+Santa Clara        $1,590,000         21,067
+San Francisco      $1,200,000          1,128
+Santa Cruz         $1,188,000          3,556
+Orange             $1,185,000         55,786
+Alameda            $1,130,000         23,432
+Monterey             $910,000          4,726
+Los Angeles          $905,000        123,098
+San Diego            $900,000         61,652
+San Luis Obispo      $875,000          7,270
+
+NOTES
+Counts represent records, not deduplicated properties.
+Numeric outliers were reviewed but not removed.
+No missing values were imputed.
+Original Week 1 inputs were preserved.
+Mortgage-rate enrichment was not performed in this run.

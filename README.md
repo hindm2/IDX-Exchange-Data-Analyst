@@ -55,125 +55,144 @@ The combined CSVs are stored separately from the 66 raw monthly files.
 ## Weeks 2-3— Dataset Understanding and Data Quality Review
 ### Week 2 — Dataset Structuring, Validation and EDA
 
-### Objective
 
-Inspect dataset structure, review missing values, examine numeric
-distributions, and flag potential data-quality issues before cleaning.
+**Objective:** Inspect dataset structure, assess missing values, review numeric distributions, and identify data-quality issues for later cleaning.
 
-### Dataset Scope and Validation
+**Script:** `da02_dataset_structuring_validation_updated.py`
 
-Week 1 combined the monthly files and filtered them to
-`PropertyType == "Residential"`.
+**Period:** January 2024–September 2026.
 
-Weeks 2–3 used those Residential-only outputs. The property-type
-check confirmed that every record was Residential, so no additional
-rows were removed.
+### Dataset Structure and Missing Values
+
+Both inputs were already filtered to `PropertyType == "Residential"` during Week 1. Validation confirmed that all input records were Residential. No additional property-type filtering was needed, and no SingleFamilyResidence restriction was applied.
 
 | Measure | Sold | Listings |
 |---------|-----:|---------:|
-| Raw records combined in Week 1 | 736,473 | 1,034,830 |
-| Residential records retained in Week 1 | 495,291 | 658,117 |
-| Records inspected in Weeks 2–3 | 495,291 | 658,117 |
-| Columns inspected | 84 | 84 |
-| Columns flagged as above 90% missing | 15 | 13 |
+| Residential records inspected | 495,291 | 658,117 |
+| Original columns | 84 | 84 |
+| Columns above 90% missing | 15 | 13 |
+| High-missing non-core columns dropped | 15 | Not yet confirmed |
+| Columns retained in analysis dataset | 69 | Not yet confirmed |
 
-During Weeks 2–3, no records or columns were removed.
-Missing values and potential outliers were documented for later cleaning.
+**Sold dataset:** all 495,291 records were retained. Column removal changed the dataset from 84 to 69 columns; it did not remove property records.
 
-### Missing-Value Review
+The following 15 sold columns were dropped from the separate analysis copy because they exceeded 90% missing values and were not designated core fields:
 
-Missing counts and percentages were calculated for every column.
-Columns with more than 90% missing values were flagged for review.
+`WaterfrontYN`, `BasementYN`, `FireplacesTotal`,
+`AboveGradeFinishedArea`, `TaxAnnualAmount`, `BuilderName`,
+`TaxYear`, `BuildingAreaTotal`, `ElementarySchoolDistrict`,
+`CoBuyerAgentFirstName`, `BelowGradeFinishedArea`, `BusinessType`,
+`CoveredSpaces`, `LotSizeDimensions`, and
+`MiddleOrJuniorSchoolDistrict`.
 
-Core analysis fields are retained even when partially missing.
-Non-core fields with very low coverage are candidates for removal
-during cleaning; no columns have been removed at this stage.
+- Core fields were retained even when partially missing.
+- Fields were classified as market-analysis fields, metadata, or other fields requiring review.
+- The original input datasets were preserved.
 
-Confirmed completely empty fields in the sold dataset include:
+### Numeric Distributions — Sold
 
-- TaxYear
-- FireplacesTotal
-- TaxAnnualAmount
-- AboveGradeFinishedArea
-- ElementarySchoolDistrict
+Numeric summaries include minimum, maximum, mean, median, and the 1st, 5th, 25th, 50th, 75th, 95th, and 99th percentiles.
 
-The full column-level recommendations are saved in each dataset's
-`missing_value_report.csv`.
-
-### Numeric Distribution Review — Sold
-
-These statistics describe the data before outlier handling.
-LivingArea values are shown in their recorded units.
-
-| Field | Minimum | Median | Mean | 95th percentile | 99th percentile | Maximum |
+| Field | Minimum | Median | Mean | 95th Percentile | 99th Percentile | Maximum |
 |-------|--------:|-------:|-----:|----------------:|----------------:|--------:|
 | ClosePrice | $0 | $825,000 | ~$1,189,311 | $2,859,933.60 | $5,600,000 | $989,500,000 |
-| LivingArea | 0 | 1,648 | ~1,902.61 | 3,568.20 | 5,300 | 17,021,320 |
+| LivingArea* | 0 | 1,648 | ~1,902.61 | 3,568.20 | 5,300 | 17,021,320 |
 | DaysOnMarket | -288 | 19 | ~37.64 | 132 | 235 | 12,430 |
 
-Histograms, boxplots, and percentile summaries were generated for
-ClosePrice, ListPrice, OriginalListPrice, LivingArea, LotSizeAcres,
-BedroomsTotal, BathroomsTotalInteger, DaysOnMarket, and YearBuilt.
+*LivingArea is shown in the recorded units; units require verification.*
+### EDA Answers — Sold
+
+Results describe the Residential sold dataset before duplicate removal
+and outlier cleaning.
+
+| Question | Answer |
+|----------|--------|
+| Median / mean close price | $825,000 / approximately $1,189,311 |
+| Median / mean DaysOnMarket | 19 days / approximately 37.64 days |
+| Sold above / below / at list price | 39.62% / 42.94% / 17.44% |
+| Listing date after close date | 75 of 495,290 comparable records |
+| Purchase-contract date after close date | 242 of 495,094 comparable records |
+| Listing date after purchase-contract date | 315 of 495,093 comparable records |
+
+The list-price comparison uses 495,288 records with finite, positive
+ClosePrice and ListPrice values. Date comparisons include only records
+where both dates could be parsed. Date-issue counts may overlap and
+should not be added together as a count of unique affected records.
+
+### Days on Market Distribution
+
+| DaysOnMarket | Records | Percentage |
+|--------------|--------:|-----------:|
+| Negative — flagged for review | 56 | 0.01% |
+| 0 | 20,006 | 4.04% |
+| 1–7 | 99,894 | 20.17% |
+| 8–30 | 190,174 | 38.40% |
+| 31–60 | 88,524 | 17.87% |
+| 61–90 | 43,472 | 8.78% |
+| 91–180 | 42,319 | 8.54% |
+| Over 180 | 10,846 | 2.19% |
+
+No missing or nonnumeric DaysOnMarket values were found.
+Negative values were flagged separately rather than treated as quick sales.
+Percentages may not total exactly 100% because of rounding.
+
+### Counties with the Highest Median Close Prices
+
+Rankings include counties with at least 200 records having finite,
+positive ClosePrice values. Counts represent records, not necessarily
+unique properties; duplicates and high outliers have not yet been removed.
+
+| County | Median Close Price | Records |
+|--------|-------------------:|--------:|
+| San Mateo | $1,700,000 | 8,452 |
+| Santa Clara | $1,590,000 | 21,067 |
+| San Francisco | $1,200,000 | 1,128 |
+| Santa Cruz | $1,188,000 | 3,556 |
+| Orange | $1,185,000 | 55,786 |
+| Alameda | $1,130,000 | 23,432 |
+| Monterey | $910,000 | 4,726 |
+| Los Angeles | $905,000 | 123,098 |
+| San Diego | $900,000 | 61,652 |
+| San Luis Obispo | $875,000 | 7,270 |
+
+San Mateo has the highest median close price among counties meeting
+the minimum record-count requirement. Date inconsistencies and negative
+DaysOnMarket values will be investigated during cleaning.
+
+Histograms and boxplots were reviewed for:
+
+- ClosePrice, ListPrice, and OriginalListPrice
+- LivingArea and LotSizeAcres
+- BedroomsTotal and BathroomsTotalInteger
+- DaysOnMarket and YearBuilt
+
+Histograms display values between the 1st and 99th percentiles for readability. Boxplots use all finite numeric values, with the ClosePrice axis zoomed to $0–$4 million. These display choices do not remove records from the dataset.
 
 ### Initial Findings
 
-- Mean close price exceeds the median, indicating a right-skewed
-  distribution that warrants reviewing high-value records.
-- Median DaysOnMarket is 19 days, compared with a mean of approximately
-  37.64 days.
-- Zero prices, negative DaysOnMarket, and exceptionally large property
-  measurements require investigation.
-- Extreme examples include 175 bathrooms, 45 bedrooms, and approximately
-  7.8 million acres.
-- IQR outlier flags are screening tools, not proof of incorrect data.
-  No outliers were removed during validation.
+- Mean close price exceeds the median, consistent with a right-skewed price distribution.
+- Median DaysOnMarket is 19 days, while the mean is approximately 37.64 days.
+- Zero prices, negative DaysOnMarket, and exceptionally large property measurements require investigation.
+- Extreme examples include a $989.5 million close price, 45 bedrooms, 175 bathrooms, and approximately 7.8 million acres.
+- Extreme values were flagged for review, not automatically removed.
+- Spearman correlations were calculated to explore relationships among numeric fields.
 
-### Sold Price Compared with List Price
+### Sale Price Compared with List Price
 
-The comparison uses 495,288 records with finite, positive ClosePrice
-and ListPrice values. Three records were excluded from this calculation
-only; they remain in the saved dataset.
+The earlier validation run compared 495,288 sold records with finite, positive ClosePrice and ListPrice values.
 
-| Sale outcome | Records | Percentage |
-|--------------|--------:|-----------:|
+| Outcome | Records | Percentage |
+|---------|--------:|-----------:|
 | Above list price | 196,241 | 39.62% |
 | At list price | 86,393 | 17.44% |
 | Below list price | 212,654 | 42.94% |
 
-### Additional Checks
+Three records were excluded from this calculation only.
 
-Date-consistency summaries and county-level close-price summaries
-were generated. These outputs require interpretation before drawing
-conclusions. County summaries include sample counts to help identify
-small groups.
+### Validation Status
 
-### Deliverables
+The sold analysis dataset contains **495,291 rows and 69 columns** after removing high-missing non-core columns.
 
-Script: `weeks2_3_dataset_validation.py`
+No duplicate records or numeric outlier rows were removed, and no missing values were imputed. Further cleaning will address the issues identified during validation.
 
-Separate `listings` and `sold` output folders contain:
-
-| Output | Purpose |
-|--------|---------|
-| property_types_in_input.csv | Property categories found in each input |
-| column_types.csv | Column names and data types |
-| field_classification.csv | Market fields, metadata, and fields needing review |
-| missing_value_report.csv | Missing counts, percentages, and recommendations |
-| numeric_distribution_summary.csv | Numeric statistics and outlier-screening counts |
-| date_consistency_summary.csv | Date-order checks |
-| validation_report.txt | Processing summary |
-| Distribution PNGs | Histograms and boxplots |
-| Validated Residential CSV | Residential records retained for later cleaning |
-
-The sold folder also contains `county_close_prices.csv`.
-
-### Status
-
-Validation and report generation are complete. Review of missing-value
-decisions, charts, date issues, and county results is ongoing.
-The datasets have not yet undergone duplicate removal, imputation,
-or outlier cleaning.
-
-Mortgage-rate enrichment was not performed in this validation run.
-
-
+Mortgage-rate enrichment is documented separately.

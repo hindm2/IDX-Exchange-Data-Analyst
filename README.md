@@ -237,4 +237,86 @@ All input records were preserved. Two columns were added: `year_month` and `rate
 
 The enriched datasets will be used in the next stage of data cleaning and analysis. Original input files were preserved.
 
+## Weeks 4–5 — Data Cleaning and Preparation
+
+**Objective:** Standardize the enriched Residential datasets, remove redundant information, and flag data-quality issues before analysis.
+
+**Script:** [week4_5_cleaning_final.py](week4_5_cleaning_final.py)
+
+**Report:** [week4_5_output.txt](outputs/week4_5_output.txt)
+
+**Period:** January 2024–September 2026.
+
+### Input Data
+
+| Dataset | Input rows | Input columns |
+|---|---:|---:|
+| Sold | 495,291 | 71 |
+| Listings | 658,117 | 73 |
+
+Both inputs were already restricted to `PropertyType == "Residential"` and enriched with monthly mortgage rates. No property-subtype restriction was applied.
+
+### Cleaning and Transformations
+
+- Converted `CloseDate`, `PurchaseContractDate`, `ListingContractDate`, and `ContractStatusChangeDate` to UTC datetime. Unparseable dates became missing values and were counted.
+- Converted price, area, property characteristics, coordinates, and mortgage rates to numeric types.
+- Converted whole-number fields to nullable `Int64` when values could be safely represented without rounding.
+- Trimmed surrounding whitespace and standardized blank text values as missing.
+- Removed confirmed redundant listing columns and completely empty non-core columns.
+- Preserved differing office-name values when both columns were present and flagged disagreements.
+- Removed duplicate rows across all retained fields after normalization.
+- Preserved missing values without imputing prices, dates, or coordinates.
+
+### Numeric Quality Flags
+
+Records were flagged for:
+
+| Flag | Condition |
+|---|---|
+| `invalid_closeprice_flag` | ClosePrice ≤ 0 |
+| `invalid_livingarea_flag` | LivingArea ≤ 0 |
+| `invalid_dom_flag` | DaysOnMarket < 0 |
+| `invalid_bedrooms_flag` | BedroomsTotal < 0 |
+| `invalid_bathrooms_flag` | BathroomsTotalInteger < 0 |
+| `any_invalid_numeric_flag` | At least one numeric rule violated |
+
+Flagged records were retained for review.
+
+### Date Consistency Checks
+
+| Flag | Meaning |
+|---|---|
+| `listing_after_close_flag` | Listing date occurs after closing |
+| `purchase_after_close_flag` | Purchase contract date occurs after closing |
+| `negative_timeline_flag` | At least one available date pair violates the expected listing → purchase → closing order |
+
+Comparisons require both dates to be present. A false flag does not confirm that all required dates are available.
+
+### Geographic Quality Checks
+
+The script flags:
+
+- Missing latitude or longitude.
+- Coordinates equal to zero.
+- Positive longitude.
+- Coordinates outside valid global latitude/longitude ranges.
+- Coordinates outside an approximate California bounding box.
+- Missing or non-California state values.
+
+The California bounding box is a screening check, not an exact state-border test. Geographic flags can overlap, and questionable records remain available for review.
+
+### Outputs
+
+| File | Purpose |
+|---|---|
+| `sold_cleaned.csv` | Prepared Residential sold records with quality flags |
+| `listings_cleaned.csv` | Prepared Residential listing records with quality flags |
+| `week4_5_output.txt` | Before/after counts, data types, conversion results, missing values, and quality-flag summaries |
+
+The report records final row and column counts and remaining exact duplicates. Original enriched input files were preserved.
+
+### Analysis Notes
+
+Quality flags should guide later analysis exclusions. Missing closing information may be expected for active or pending listings. Duplicate removal does not establish that each remaining row represents a unique property.
+
 

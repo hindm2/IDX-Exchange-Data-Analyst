@@ -52,8 +52,8 @@ Listings and sold records were processed separately and filtered to
 
 The combined CSVs are stored separately from the 66 raw monthly files.
 
-## Week 2 — Dataset Understanding and Data Quality Review
-### Weeks 2 — Dataset Structuring, Validation and EDA
+## Weeks 2-3— Dataset Understanding and Data Quality Review
+### Week 2 — Dataset Structuring, Validation and EDA
 
 ### Objective
 

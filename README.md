@@ -58,7 +58,7 @@ The combined CSVs are stored separately from the 66 raw monthly files.
 
 **Objective:** Inspect dataset structure, assess missing values, review numeric distributions, and identify data-quality issues for later cleaning.
 
-**Script:** `da02_dataset_structuring_validation_updated.py`
+**Script:** [week2_dataset_understanding.py](week2_dataset_understanding.py)
 
 **Period:** January 2024–September 2026.
 

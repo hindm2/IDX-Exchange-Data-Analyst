@@ -1,0 +1,432 @@
+WEEKS 4–5: DATA CLEANING AND PREPARATION
+
+Cleaning decisions:
+- Kept Residential properties.
+- Converted four date fields to UTC datetime.
+- Converted numeric fields; preserved missing values.
+- Flagged invalid numbers, date-order issues, and geographic issues.
+- Removed confirmed redundant listing columns: ['PropertyType.1', 'ListAgentFirstName.1', 'DaysOnMarket.1', 'LivingArea.1', 'Longitude.1', 'Latitude.1', 'ListPrice.1', 'ListAgentLastName.1', 'CloseDate.1', 'BuyerOfficeName.1', 'UnparsedAddress.1'].
+- Removed completely empty non-core columns by dataset: {'Sold': [], 'Listings': []}.
+- Compared BuyerOfficeName columns when both were present.
+- Removed rows identical across all retained fields after normalization; trimmed surrounding text.
+- Converted whole-number fields to nullable Int64 only when safe; otherwise retained numeric values.
+- Did not impute prices, dates, or coordinates.
+- Kept questionable records flagged for review.
+
+--- SOLD ---
+Original loaded rows: 495,291
+Rows after Residential filter: 495,291
+Exact duplicate rows removed after transformations: 48
+Original loaded columns: 71
+Final rows: 495,243
+Final columns: 88
+Remaining exact duplicates: 0
+
+DATA TYPES
+Flooring                            string[python]
+ViewYN                              string[python]
+PoolPrivateYN                       string[python]
+OriginalListPrice                          Float64
+ListingKey                                   int64
+ListAgentEmail                      string[python]
+CloseDate                      datetime64[ns, UTC]
+ClosePrice                                 Float64
+ListAgentFirstName                  string[python]
+ListAgentLastName                   string[python]
+Latitude                                   Float64
+Longitude                                  Float64
+UnparsedAddress                     string[python]
+PropertyType                        string[python]
+LivingArea                                 Float64
+ListPrice                                  Float64
+DaysOnMarket                                 Int64
+ListOfficeName                      string[python]
+BuyerOfficeName                     string[python]
+CoListOfficeName                    string[python]
+ListAgentFullName                   string[python]
+CoListAgentFirstName                string[python]
+CoListAgentLastName                 string[python]
+BuyerAgentMlsId                     string[python]
+BuyerAgentFirstName                 string[python]
+BuyerAgentLastName                  string[python]
+AssociationFeeFrequency             string[python]
+ListingKeyNumeric                            int64
+MLSAreaMajor                        string[python]
+CountyOrParish                      string[python]
+MlsStatus                           string[python]
+ElementarySchool                    string[python]
+AttachedGarageYN                    string[python]
+ParkingTotal                               float64
+PropertySubType                     string[python]
+LotSizeAcres                               Float64
+SubdivisionName                     string[python]
+BuyerOfficeAOR                      string[python]
+YearBuilt                                    Int64
+BuyerAgencyCompensationType         string[python]
+StreetNumberNumeric                        float64
+ListingId                           string[python]
+BathroomsTotalInteger                        Int64
+City                                string[python]
+BuyerAgencyCompensation                    float64
+BedroomsTotal                                Int64
+ContractStatusChangeDate       datetime64[ns, UTC]
+PurchaseContractDate           datetime64[ns, UTC]
+ListingContractDate            datetime64[ns, UTC]
+StateOrProvince                     string[python]
+MiddleOrJuniorSchool                string[python]
+FireplaceYN                         string[python]
+Stories                                    float64
+HighSchool                          string[python]
+Levels                              string[python]
+LotSizeArea                                float64
+MainLevelBedrooms                          float64
+NewConstructionYN                   string[python]
+GarageSpaces                               float64
+HighSchoolDistrict                  string[python]
+PostalCode                          string[python]
+AssociationFee                             float64
+LotSizeSquareFeet                          Float64
+latfilled                           string[python]
+lonfilled                           string[python]
+BuyerAgentAOR                       string[python]
+ListAgentAOR                        string[python]
+OriginatingSystemName               string[python]
+OriginatingSystemSubName            string[python]
+year_month                          string[python]
+rate_30yr_fixed                            Float64
+invalid_closeprice_flag                       bool
+invalid_livingarea_flag                       bool
+invalid_dom_flag                              bool
+invalid_bedrooms_flag                         bool
+invalid_bathrooms_flag                        bool
+any_invalid_numeric_flag                      bool
+listing_after_close_flag                      bool
+purchase_after_close_flag                     bool
+negative_timeline_flag                        bool
+geo_missing_flag                              bool
+geo_zero_flag                                 bool
+geo_positive_lon_flag                         bool
+geo_impossible_flag                           bool
+geo_outside_ca_box_flag                       bool
+geo_coordinate_issue_flag                     bool
+state_missing_flag                            bool
+state_outside_ca_flag                         bool
+
+FINAL FLAG COUNTS
+invalid_closeprice_flag: 1 (0.000%)
+invalid_livingarea_flag: 177 (0.036%)
+invalid_dom_flag: 56 (0.011%)
+invalid_bedrooms_flag: 0 (0.000%)
+invalid_bathrooms_flag: 0 (0.000%)
+any_invalid_numeric_flag: 234 (0.047%)
+listing_after_close_flag: 75 (0.015%)
+purchase_after_close_flag: 242 (0.049%)
+negative_timeline_flag: 557 (0.112%)
+geo_missing_flag: 4,796 (0.968%)
+geo_zero_flag: 46 (0.009%)
+geo_positive_lon_flag: 35 (0.007%)
+geo_impossible_flag: 2 (0.000%)
+geo_outside_ca_box_flag: 118 (0.024%)
+geo_coordinate_issue_flag: 4,878 (0.985%)
+state_missing_flag: 2 (0.000%)
+state_outside_ca_flag: 31 (0.006%)
+
+FINAL MISSING VALUES
+Flooring                       177967
+ViewYN                          42907
+PoolPrivateYN                   41383
+OriginalListPrice                 900
+ListAgentEmail                  82302
+ClosePrice                          2
+ListAgentFirstName               3580
+ListAgentLastName                  46
+Latitude                         4796
+Longitude                        4796
+UnparsedAddress                   532
+LivingArea                        274
+BuyerOfficeName                  7684
+CoListOfficeName               378223
+ListAgentFullName                 111
+CoListAgentFirstName           381391
+CoListAgentLastName            381093
+BuyerAgentMlsId                   679
+BuyerAgentFirstName              2267
+BuyerAgentLastName                211
+AssociationFeeFrequency        288974
+MLSAreaMajor                    67257
+ElementarySchool               429624
+AttachedGarageYN                75650
+ParkingTotal                      430
+PropertySubType                   923
+LotSizeAcres                    37975
+SubdivisionName                310081
+BuyerOfficeAOR                  31868
+YearBuilt                         443
+BuyerAgencyCompensationType    437915
+StreetNumberNumeric               641
+BathroomsTotalInteger              71
+City                              322
+BuyerAgencyCompensation        437928
+BedroomsTotal                      13
+ContractStatusChangeDate          594
+PurchaseContractDate              197
+ListingContractDate                 1
+StateOrProvince                     2
+MiddleOrJuniorSchool           429142
+FireplaceYN                       388
+Stories                         74730
+HighSchool                     409425
+Levels                          46125
+LotSizeArea                     37374
+MainLevelBedrooms              207302
+NewConstructionYN               37181
+GarageSpaces                    21191
+HighSchoolDistrict             136941
+PostalCode                          4
+AssociationFee                 113213
+LotSizeSquareFeet               37520
+latfilled                      387086
+lonfilled                      387086
+BuyerAgentAOR                   70327
+ListAgentAOR                    57394
+OriginatingSystemName          369497
+OriginatingSystemSubName       369497
+
+--- LISTINGS ---
+Original loaded rows: 658,117
+Rows after Residential filter: 658,117
+Exact duplicate rows removed after transformations: 1,300
+Original loaded columns: 73
+Final rows: 656,817
+Final columns: 79
+Remaining exact duplicates: 0
+
+DATA TYPES
+OriginalListPrice                          Float64
+ListingKey                                   int64
+ListAgentEmail                      string[python]
+CloseDate                      datetime64[ns, UTC]
+ClosePrice                                 Float64
+ListAgentFirstName                  string[python]
+ListAgentLastName                   string[python]
+Latitude                                   Float64
+Longitude                                  Float64
+UnparsedAddress                     string[python]
+PropertyType                        string[python]
+LivingArea                                 Float64
+ListPrice                                  Float64
+DaysOnMarket                                 Int64
+ListOfficeName                      string[python]
+BuyerOfficeName                     string[python]
+CoListOfficeName                    string[python]
+ListAgentFullName                   string[python]
+CoListAgentFirstName                string[python]
+CoListAgentLastName                 string[python]
+BuyerAgentMlsId                     string[python]
+BuyerAgentFirstName                 string[python]
+BuyerAgentLastName                  string[python]
+AssociationFeeFrequency             string[python]
+ListingKeyNumeric                            int64
+MLSAreaMajor                        string[python]
+CountyOrParish                      string[python]
+MlsStatus                           string[python]
+ElementarySchool                    string[python]
+AttachedGarageYN                    string[python]
+ParkingTotal                               float64
+PropertySubType                     string[python]
+LotSizeAcres                               Float64
+SubdivisionName                     string[python]
+BuyerOfficeAOR                      string[python]
+YearBuilt                                    Int64
+BuyerAgencyCompensationType         string[python]
+StreetNumberNumeric                        float64
+ListingId                           string[python]
+BathroomsTotalInteger                        Int64
+City                                string[python]
+BuyerAgencyCompensation                    float64
+BedroomsTotal                                Int64
+ContractStatusChangeDate       datetime64[ns, UTC]
+PurchaseContractDate           datetime64[ns, UTC]
+ListingContractDate            datetime64[ns, UTC]
+StateOrProvince                     string[python]
+MiddleOrJuniorSchool                string[python]
+FireplaceYN                         string[python]
+Stories                                    float64
+HighSchool                          string[python]
+Levels                              string[python]
+LotSizeArea                                float64
+MainLevelBedrooms                          float64
+NewConstructionYN                   string[python]
+GarageSpaces                               float64
+HighSchoolDistrict                  string[python]
+PostalCode                          string[python]
+AssociationFee                             float64
+LotSizeSquareFeet                          Float64
+year_month                          string[python]
+rate_30yr_fixed                            Float64
+invalid_closeprice_flag                       bool
+invalid_livingarea_flag                       bool
+invalid_dom_flag                              bool
+invalid_bedrooms_flag                         bool
+invalid_bathrooms_flag                        bool
+any_invalid_numeric_flag                      bool
+listing_after_close_flag                      bool
+purchase_after_close_flag                     bool
+negative_timeline_flag                        bool
+geo_missing_flag                              bool
+geo_zero_flag                                 bool
+geo_positive_lon_flag                         bool
+geo_impossible_flag                           bool
+geo_outside_ca_box_flag                       bool
+geo_coordinate_issue_flag                     bool
+state_missing_flag                            bool
+state_outside_ca_flag                         bool
+
+FINAL FLAG COUNTS
+invalid_closeprice_flag: 0 (0.000%)
+invalid_livingarea_flag: 422 (0.064%)
+invalid_dom_flag: 36 (0.005%)
+invalid_bedrooms_flag: 0 (0.000%)
+invalid_bathrooms_flag: 0 (0.000%)
+any_invalid_numeric_flag: 458 (0.070%)
+listing_after_close_flag: 88 (0.013%)
+purchase_after_close_flag: 267 (0.041%)
+negative_timeline_flag: 586 (0.089%)
+geo_missing_flag: 81,276 (12.374%)
+geo_zero_flag: 95 (0.014%)
+geo_positive_lon_flag: 93 (0.014%)
+geo_impossible_flag: 6 (0.001%)
+geo_outside_ca_box_flag: 394 (0.060%)
+geo_coordinate_issue_flag: 81,466 (12.403%)
+state_missing_flag: 76 (0.012%)
+state_outside_ca_flag: 154 (0.023%)
+
+FINAL MISSING VALUES
+OriginalListPrice                 957
+ListAgentEmail                 112879
+CloseDate                      428203
+ClosePrice                     450664
+ListAgentFirstName               5007
+ListAgentLastName                  48
+Latitude                        81276
+Longitude                       81276
+UnparsedAddress                   993
+LivingArea                        641
+BuyerOfficeName                438480
+CoListOfficeName               509121
+ListAgentFullName                 128
+CoListAgentFirstName           509713
+CoListAgentLastName            509228
+BuyerAgentMlsId                435707
+BuyerAgentFirstName            436442
+BuyerAgentLastName             435513
+AssociationFeeFrequency        376670
+MLSAreaMajor                    89775
+ElementarySchool               578000
+AttachedGarageYN               113859
+ParkingTotal                       20
+PropertySubType                  1477
+LotSizeAcres                    52728
+SubdivisionName                414017
+BuyerOfficeAOR                 454519
+YearBuilt                        1086
+BuyerAgencyCompensationType    577804
+StreetNumberNumeric              1212
+BathroomsTotalInteger              57
+City                              611
+BuyerAgencyCompensation        577824
+BedroomsTotal                     172
+ContractStatusChangeDate         6786
+PurchaseContractDate           317121
+StateOrProvince                    76
+MiddleOrJuniorSchool           577982
+FireplaceYN                       682
+Stories                        112724
+HighSchool                     553382
+Levels                          69131
+LotSizeArea                     51778
+MainLevelBedrooms              296927
+NewConstructionYN               45724
+GarageSpaces                    35725
+HighSchoolDistrict             196400
+PostalCode                         15
+AssociationFee                 157141
+LotSizeSquareFeet               51985
+
+INTERPRETATION NOTES
+- Missing closing information may be expected for unsold listings.
+- A False date-order flag does not establish that all dates are present.
+- California bounding-box flags are screening checks, not state-border tests.
+- Non-California state values are retained for review.
+- Geographic flags can overlap; do not add their counts together.
+
+DATE CONVERSIONS (BEFORE DEDUPLICATION)
+ Dataset                   Column  Missing before  Failed conversions  Missing after           Data type
+    Sold                CloseDate               0                   0              0 datetime64[ns, UTC]
+    Sold     PurchaseContractDate             197                   0            197 datetime64[ns, UTC]
+    Sold      ListingContractDate               1                   0              1 datetime64[ns, UTC]
+    Sold ContractStatusChangeDate             594                   0            594 datetime64[ns, UTC]
+Listings                CloseDate          428203                   0         428203 datetime64[ns, UTC]
+Listings     PurchaseContractDate          317121                   0         317121 datetime64[ns, UTC]
+Listings      ListingContractDate               0                   0              0 datetime64[ns, UTC]
+Listings ContractStatusChangeDate            6786                   0           6786 datetime64[ns, UTC]
+
+NUMERIC CONVERSIONS (BEFORE DEDUPLICATION)
+ Dataset                Column  Missing before  Failed conversions  Missing after Data type
+    Sold            ClosePrice               2                   0              2   Float64
+    Sold             ListPrice               0                   0              0   Float64
+    Sold     OriginalListPrice             900                   0            900   Float64
+    Sold            LivingArea             274                   0            274   Float64
+    Sold     LotSizeSquareFeet           37524                   0          37524   Float64
+    Sold          LotSizeAcres           37979                   0          37979   Float64
+    Sold          DaysOnMarket               0                   0              0     Int64
+    Sold         BedroomsTotal              13                   0             13   Float64
+    Sold BathroomsTotalInteger              71                   0             71   Float64
+    Sold             YearBuilt             443                   0            443   Float64
+    Sold              Latitude            4796                   0           4796   Float64
+    Sold             Longitude            4796                   0           4796   Float64
+    Sold       rate_30yr_fixed               0                   0              0   Float64
+Listings            ClosePrice          450666                   0         450666   Float64
+Listings             ListPrice               0                   0              0   Float64
+Listings     OriginalListPrice             957                   0            957   Float64
+Listings            LivingArea             641                   0            641   Float64
+Listings     LotSizeSquareFeet           52072                   0          52072   Float64
+Listings          LotSizeAcres           52819                   0          52819   Float64
+Listings          DaysOnMarket               0                   0              0     Int64
+Listings         BedroomsTotal             172                   0            172   Float64
+Listings BathroomsTotalInteger              57                   0             57   Float64
+Listings             YearBuilt            1088                   0           1088   Float64
+Listings              Latitude           81287                   0          81287   Float64
+Listings             Longitude           81287                   0          81287   Float64
+Listings       rate_30yr_fixed               0                   0              0   Float64
+
+REDUNDANT LISTING COLUMN REVIEW
+   Original column     Duplicate column  Matching rows  Different rows
+      PropertyType       PropertyType.1         658117               0
+ListAgentFirstName ListAgentFirstName.1         658117               0
+      DaysOnMarket       DaysOnMarket.1         658117               0
+        LivingArea         LivingArea.1         658117               0
+         Longitude          Longitude.1         658117               0
+          Latitude           Latitude.1         658117               0
+         ListPrice          ListPrice.1         658117               0
+ ListAgentLastName  ListAgentLastName.1         658117               0
+         CloseDate          CloseDate.1         658117               0
+   BuyerOfficeName    BuyerOfficeName.1         658117               0
+   UnparsedAddress    UnparsedAddress.1         658117               0
+
+TEXT CLEANUP (BEFORE DEDUPLICATION)
+ Dataset             Column  Values trimmed  Blanks made missing
+    Sold  ListAgentLastName               3                    0
+    Sold    UnparsedAddress             110                    0
+    Sold  ListAgentFullName            3543                    0
+    Sold BuyerAgentLastName               2                    0
+Listings  ListAgentLastName               5                    0
+Listings    UnparsedAddress             220                    0
+Listings     ListOfficeName               1                    0
+Listings  ListAgentFullName            4980                    0
+Listings BuyerAgentLastName               1                    0
+
+DUPLICATE REMOVAL
+ Dataset  Rows before  Exact duplicates removed  Final rows
+    Sold       495291                        48      495243
+Listings       658117                      1300      656817

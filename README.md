@@ -196,3 +196,45 @@ The sold analysis dataset contains **495,291 rows and 69 columns** after removin
 No duplicate records or numeric outlier rows were removed, and no missing values were imputed. Further cleaning will address the issues identified during validation.
 
 Mortgage-rate enrichment is documented separately.
+
+### Week 3 — Mortgage Rate Enrichment
+
+**Objective:** Add monthly mortgage rates to the validated Residential listings and sold datasets to support later market analysis.
+
+**Script:** [week3_mortgage_rate_enrichment.py](week3_mortgage_rate_enrichment.py)
+
+**Period:** January 2024–September 2026.
+
+#### Data Source and Method
+
+Mortgage rates were retrieved from FRED using the [MORTGAGE30US series](https://fred.stlouisfed.org/series/MORTGAGE30US), which reports weekly 30-year fixed mortgage rates.
+
+Weekly observations were averaged within each calendar month. A `year_month` key was then created using:
+
+- `CloseDate` for sold records.
+- `ListingContractDate` for listing records.
+
+Monthly rates were added through a left merge with `validate="many_to_one"`, ensuring that each record matched at most one monthly rate.
+
+#### Validation Results
+
+| Measure | Sold | Listings |
+|---|---:|---:|
+| Input records | 495,291 | 658,117 |
+| Records after enrichment | 495,291 | 658,117 |
+| Records missing mortgage rates | 0 | 0 |
+| Input columns | 69 | 71 |
+| Columns after enrichment | 71 | 73 |
+
+All input records were preserved. Two columns were added: `year_month` and `rate_30yr_fixed`.
+
+#### Outputs
+
+| File | Contents |
+|---|---|
+| `combined_sold_with_rates.csv` | Residential sold records with monthly mortgage rates |
+| `combined_listings_with_rates.csv` | Residential listing records with monthly mortgage rates |
+
+The enriched datasets will be used in the next stage of data cleaning and analysis. Original input files were preserved.
+
+**Interpretation:** `rate_30yr_fixed` is expressed as a percentage. It provides national mortgage-market context and does not represent the actual mortgage rate obtained by an individual buyer.

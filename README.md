@@ -322,10 +322,6 @@ Quality flags should guide later analysis exclusions. Missing closing informatio
 
 # Week 6: Feature Engineering and Market Segmentation
 
-## IDX Exchange — Data Analyst Internship
-
-### Project Overview
-
 During Week 6, I focused on feature engineering, market segmentation, and geospatial analysis using California residential real estate data.
 
 The goal was to transform cleaned transaction data into meaningful business metrics and identify patterns in housing prices, market activity, and brokerage performance.

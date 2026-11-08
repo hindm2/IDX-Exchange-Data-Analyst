@@ -320,3 +320,297 @@ The report records final row and column counts and remaining exact duplicates. O
 Quality flags should guide later analysis exclusions. Missing closing information may be expected for active or pending listings. Duplicate removal does not establish that each remaining row represents a unique property.
 
 
+# Week 6: Feature Engineering and Market Segmentation
+
+## IDX Exchange — Data Analyst Internship
+
+### Project Overview
+
+During Week 6, I focused on feature engineering, market segmentation, and geospatial analysis using California residential real estate data.
+
+The goal was to transform cleaned transaction data into meaningful business metrics and identify patterns in housing prices, market activity, and brokerage performance.
+
+**Dataset:** 495,243 residential sold transactions  
+**Period:** January 2024 – September 2026  
+**Tools:** Python, Pandas, NumPy, GeoPandas, Matplotlib, Google Colab
+
+---
+
+## 1. Objectives
+
+- Engineer new features to measure real estate market performance.
+- Analyze sale prices, price per square foot, and days on market.
+- Segment transactions by county, property type, and MLS area.
+- Compare listing and buyer brokerage activity.
+- Enrich transaction data with California school district boundaries.
+- Validate engineered features and geographic matches.
+- Create summary tables and visualizations.
+
+---
+
+## 2. Feature Engineering
+
+I created new features to better understand property pricing and transaction timelines.
+
+| Feature | Description |
+|---|---|
+| PriceRatio | Sale price divided by listing price |
+| CloseToOriginalListRatio | Sale price divided by original listing price |
+| PricePerSqFt | Sale price divided by living area |
+| DaysOnMarket_W6 | Number of days a property spent on the market |
+| ListingToContractDays | Days between listing and purchase contract |
+| ContractToCloseDays | Days between purchase contract and closing |
+| Year | Transaction year |
+| Month | Transaction month |
+| YrMo | Year and month for time-series analysis |
+
+### Feature Validation
+
+I created validated versions of important features:
+
+- `PriceRatio_Valid`
+- `PricePerSqFt_Valid`
+- `DaysOnMarket_Valid`
+- `ListingToContractDays_Valid`
+- `ContractToCloseDays_Valid`
+
+Invalid or implausible values were replaced with `NaN` instead of deleting entire transactions.
+
+This approach helped preserve the dataset while improving the reliability of calculated metrics.
+
+---
+
+## 3. Market Segmentation
+
+I grouped residential transactions into different market segments.
+
+### County Analysis
+
+Analyzed 63 county labels using:
+
+- Total sales
+- Median closing price
+- Median price per square foot
+- Median days on market
+- Median listing-to-contract days
+- Median contract-to-close days
+- Median sale-to-list price ratio
+
+### Property Type Analysis
+
+Analyzed 21 property type and subtype combinations to compare pricing, transaction volume, and market speed.
+
+### MLS Area Analysis
+
+Analyzed 1,317 county–MLS area combinations to identify more localized real estate market patterns.
+
+---
+
+## 4. Brokerage Analysis
+
+I analyzed listing and buyer brokerage activity.
+
+### Brokerage Name Cleaning
+
+Brokerage names were standardized by:
+
+- Converting names to lowercase
+- Removing unnecessary spaces
+- Removing selected punctuation
+- Standardizing repeated spaces
+
+### Results
+
+| Metric | Count |
+|---|---:|
+| Unique listing brokerage names | 18,818 |
+| Unique buyer brokerage names | 21,166 |
+| Brokerages active on both sides | 14,817 |
+| Listing-side only | 4,001 |
+| Buyer-side only | 6,349 |
+
+I also compared listing-side sales, buyer-side sales, and combined transaction-side activity.
+
+---
+
+## 5. Geospatial Feature Engineering
+
+I integrated California school district geographic boundaries with residential property transactions.
+
+### Geographic Data
+
+**Source:** California 2024–2025 school district boundary shapefile
+
+The dataset contained 937 polygons:
+
+- 516 Elementary districts
+- 345 Unified districts
+- 76 High school districts
+
+### Methodology
+
+1. Loaded the school district shapefile using GeoPandas.
+2. Converted property latitude and longitude into geographic points.
+3. Assigned the property points to EPSG:4326.
+4. Reprojected the points to EPSG:3857 to match the district polygons.
+5. Performed spatial joins using `gpd.sjoin()`.
+6. Identified unmatched and ambiguous geographic assignments.
+7. Merged district information into the residential sales dataset.
+
+### Geographic Validation
+
+| Metric | Count |
+|---|---:|
+| Total residential transactions | 495,243 |
+| Properties with plausible coordinates | 490,332 |
+| Missing or implausible coordinates | 4,911 |
+
+### Elementary District Matching
+
+| Status | Properties |
+|---|---:|
+| Matched | 488,188 |
+| Ambiguous | 2,002 |
+| No match | 5,053 |
+
+Ambiguous matches occurred when properties intersected both Elementary and Unified district polygons.
+
+These transactions were flagged rather than assigned an arbitrary district.
+
+### High School District Matching
+
+| Status | Properties |
+|---|---:|
+| Matched | 489,739 |
+| No match | 5,504 |
+
+The final enriched dataset preserved all 495,243 transactions without duplicate property identifiers.
+
+---
+
+## 6. School District Market Analysis
+
+I created separate summaries for elementary/unified and high/unified school districts.
+
+| Metric | Elementary / Unified | High / Unified |
+|---|---:|---:|
+| Distinct district names | 695 | 408 |
+| Matched transactions | 488,188 | 489,739 |
+
+### Metrics Calculated
+
+- Total sales
+- Median closing price
+- Median price per square foot
+- Median days on market
+- Median sale-to-list price ratio
+
+### Selected Findings
+
+**Los Angeles Unified**
+- 50,322 transactions
+- Median closing price: $981,000
+- Median days on market: 21
+
+**San Diego Unified**
+- 17,937 transactions
+- Median closing price: $930,000
+- Median days on market: 15
+
+**Capistrano Unified**
+- 10,327 transactions
+- Median closing price: $1,375,000
+
+**Desert Sands Unified**
+- 9,487 transactions
+- Median days on market: 51
+
+**Palm Springs Unified**
+- 9,003 transactions
+- Median days on market: 49
+
+These results demonstrate differences in transaction volume, property prices, and market speed across district geographic areas.
+
+---
+
+## 7. Data Quality and Validation
+
+Validation procedures included:
+
+- Checking engineered metrics for invalid values
+- Preserving original transaction records
+- Validating latitude and longitude ranges
+- Aligning coordinate reference systems
+- Identifying ambiguous spatial matches
+- Checking for duplicate property identifiers
+- Confirming the final dataset contained 495,243 transactions
+
+---
+
+## 8. Project Deliverables
+
+### Python Notebook
+
+`DA06_Feature_Engineering.ipynb`
+
+### Exported Datasets
+
+- `week6_sold_enriched.csv`
+- `week6_elementary_district_summary.csv`
+- `week6_high_school_district_summary.csv`
+
+### Visualizations
+
+Six school district charts were exported:
+
+- Elementary district sales volume
+- Elementary district median price
+- Elementary district price per square foot
+- Elementary district days on market
+- Elementary district sale-to-list price ratio
+- High school district sales volume
+
+Additional market segmentation and brokerage charts were created during the analysis and are pending final export.
+
+---
+
+## 9. Limitations
+
+- School district boundaries were based on the 2024–2025 geographic dataset.
+- Some transactions had missing or implausible coordinates.
+- Ambiguous elementary district assignments were excluded from district-level summaries.
+- Geographic district assignment does not guarantee school attendance eligibility.
+- Unified districts appear in both elementary and high school summaries.
+- Brokerage name normalization may not resolve all naming inconsistencies.
+- Market comparisons do not establish causal relationships.
+
+---
+
+## 10. Skills Demonstrated
+
+- Python programming
+- Data cleaning and validation
+- Feature engineering
+- Pandas and NumPy
+- GeoPandas
+- Spatial joins
+- Coordinate reference systems (CRS)
+- Real estate market segmentation
+- Brokerage analysis
+- Data visualization with Matplotlib
+- Business insights and reporting
+
+---
+
+## 11. Conclusion
+
+Week 6 focused on transforming cleaned residential real estate data into an enriched analytical dataset.
+
+Through feature engineering, market segmentation, brokerage analysis, and geographic enrichment, I developed additional metrics to better understand California housing market activity.
+
+This work strengthened my skills in data preparation, geospatial analysis, data validation, and translating large datasets into meaningful business insights.
+
+The enriched dataset can support future market analysis, dashboard development, and predictive modeling.
+
+
+
